@@ -27,7 +27,7 @@ function Register() {
         try {
 
             const response = await fetch(
-                "https://jwt-form-backend.onrender.com/login/api/auth/register",
+                "https://jwt-form-backend.onrender.com/api/auth/register",
                 {
                     method: "POST",
 

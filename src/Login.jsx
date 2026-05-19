@@ -29,7 +29,7 @@ function Login() {
 
             // Backend API call
             const response = await fetch(
-                "https://jwt-form-backend.onrender.com/login/api/auth/login",
+                "https://jwt-form-backend.onrender.com/api/auth/login",
                 {
                     method: "POST",
 
