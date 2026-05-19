@@ -15,7 +15,7 @@ function Home() {
     }
 
     // Verify token
-    fetch("http://localhost:5000/api/auth/home", {
+    fetch("https://jwt-form-backend.onrender.com/api/auth/home", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
