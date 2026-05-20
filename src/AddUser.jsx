@@ -1,34 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 function AddUser() {
 
-    const [formData, setFormData] = useState({
+    const navigate = useNavigate();
+
+    const [userData, setUserData] = useState({
         name: "",
         email: "",
         password: "",
-        phone: "",
-        role: ""
+        phone: ""
     });
 
-    // Handle Input Change
+    const [loading, setLoading] = useState(false);
+
+    // Handle Change
     const handleChange = (e) => {
 
-        setFormData({
-            ...formData,
+        setUserData({
+            ...userData,
             [e.target.name]: e.target.value
         });
     };
 
-    // Handle Form Submit
+    // Submit Form
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
+        setLoading(true);
+
         try {
 
+            // API Call
             const response = await fetch(
-                "https://jwt-form-backend.onrender.com/api/auth/register",
+                "https://jwt-form-backend.onrender.com/api/user/createuser",
                 {
                     method: "POST",
 
@@ -36,38 +43,43 @@ function AddUser() {
                         "Content-Type": "application/json"
                     },
 
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(userData)
                 }
             );
 
-            const data = await response.json();
+            const result = await response.json();
 
-            console.log(data);
+            console.log(result);
 
-            if (data.success) {
+            // Success
+            if (result.success) {
 
                 alert("User Added Successfully");
 
                 // Clear Form
-                setFormData({
+                setUserData({
                     name: "",
                     email: "",
                     password: "",
-                    phone: "",
-                    role: ""
+                    phone: ""
                 });
+
+                // Redirect To Users Page
+                navigate("/admin/user");
 
             } else {
 
-                alert(data.message);
+                alert(result.message);
             }
 
         } catch (error) {
 
-            console.log("Add User Error:", error);
+            console.log(error);
 
             alert("Server Error");
         }
+
+        setLoading(false);
     };
 
     return (
@@ -82,7 +94,7 @@ function AddUser() {
                         textAlign: "center"
                     }}
                 >
-                    Create User
+                    Add User
                 </h1>
 
                 <form
@@ -94,7 +106,7 @@ function AddUser() {
                         type="text"
                         name="name"
                         placeholder="Enter Name"
-                        value={formData.name}
+                        value={userData.name}
                         onChange={handleChange}
                         required
                     />
@@ -103,7 +115,7 @@ function AddUser() {
                         type="email"
                         name="email"
                         placeholder="Enter Email"
-                        value={formData.email}
+                        value={userData.email}
                         onChange={handleChange}
                         required
                     />
@@ -112,7 +124,7 @@ function AddUser() {
                         type="password"
                         name="password"
                         placeholder="Enter Password"
-                        value={formData.password}
+                        value={userData.password}
                         onChange={handleChange}
                         required
                     />
@@ -121,28 +133,21 @@ function AddUser() {
                         type="tel"
                         name="phone"
                         placeholder="Enter Phone"
-                        value={formData.phone}
+                        value={userData.phone}
                         onChange={handleChange}
                         required
                     />
-                 
-                    
 
-                    <button type="submit">
-                        Register User
+                    <button
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {
+                            loading
+                            ? "Adding..."
+                            : "Add User"
+                        }
                     </button>
-                    <p className="authText">
-
-                        You  have an account ?
-
-                        <Link
-                            to="/"
-                            className="authLink"
-                        >
-                            Login
-                        </Link>
-
-                    </p>
 
                 </form>
 
