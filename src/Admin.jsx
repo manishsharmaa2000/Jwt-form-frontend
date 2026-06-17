@@ -1,105 +1,75 @@
 import React from "react";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 
-import {
-    Link,
-    Routes,
-    Route,
-    useNavigate
-} from "react-router-dom";
-
-import "../src/static/admin.css";
+import "./static/admin.css";
 
 import Home from "./Home";
-import AddUser from "./AddUser";
+import AddDetails from "./AddDetails";
 import User from "./User";
+import Dashboard from "./Dashboard";
+import Blog from "./Blog";
 
 function Admin() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/", { replace: true });
+  };
 
-    // Logout
-    const handleLogout = () => {
+  return (
+    <div className="mainContainer">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <div>
+          <h2 className="logo">CMS</h2>
 
-        localStorage.removeItem("token");
+          <Link className="menuLink" to="/dashboard">
+            Dashboard
+          </Link>
 
-        navigate("/", { replace: true });
-    };
+          <Link className="menuLink" to="/dashboard/adddetails">
+            Add Details
+          </Link>
 
-    return (
+          <Link className="menuLink" to="/dashboard/user">
+            Users
+          </Link>
 
-        <div className="mainContainer">
-
-            {/* Sidebar */}
-            <div className="sidebar">
-
-                <h2 className="logo">
-                    Admin Panel
-                </h2>
-
-                <Link
-                    className="menuLink"
-                    to="/admin/adduser"
-                >
-                    Add User
-                </Link>
-                <Link
-                    className="menuLink"
-                    to="/admin/user"
-                >
-                     Users
-                </Link>
-
-                <button
-                    className="menuLink"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </button>
-
-            </div>
-
-            {/* Main Content */}
-            <div className="contentArea">
-
-                {/* Navbar */}
-                <nav className="navbar">
-
-                    <h2>
-                        Welcome Admin
-                    </h2>
-
-                </nav>
-
-                {/* Page Content */}
-                <div className="pageContent">
-
-                    <Routes>
-
-                        {/* Default Admin Home */}
-                        <Route
-                            path="/"
-                            element={<Home />}
-                        />
-
-                        {/* Add User */}
-                        <Route
-                            path="adduser"
-                            element={<AddUser />}
-                        />
-
-                        <Route
-                            path="user"
-                            element={<User/>}
-                        />
-
-                    </Routes>
-
-                </div>
-
-            </div>
-
+          <Link className="menuLink" to="/dashboard/blog">
+            Blogs
+          </Link>
         </div>
-    );
+
+        {/* Logout Button Bottom */}
+        <div className="logoutSection">
+          <button className="menuLink logoutBtn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Right Side */}
+      <div className="contentArea">
+        {/* Fixed Navbar */}
+        <nav className="navbar">
+          <h2>College Management System</h2>
+        </nav>
+
+        {/* Page Content */}
+        <div className="pageContent">
+          <Routes>
+            <Route index element={<Dashboard />} />
+
+            <Route path="adddetails" element={<AddDetails />} />
+
+            <Route path="user" element={<User />} />
+            <Route path="blog" element={<Blog />} />
+          </Routes>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Admin;

@@ -1,0 +1,462 @@
+.contact-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #f5f5f5;
+}
+
+
+/* ================= FORM ================= */
+
+.contact-form {
+  max-width: 1000px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+
+.contact-form h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+
+.form-row input {
+  flex: 1;
+}
+
+
+
+.contact-form input,
+.contact-form textarea {
+
+  width:100%;
+  padding:12px;
+
+  border:1px solid #ddd;
+
+  border-radius:8px;
+
+  outline:none;
+
+  box-sizing:border-box;
+
+  font-size:15px;
+
+}
+
+
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+
+ border-color:#0d6efd;
+
+}
+
+
+
+.contact-form textarea {
+
+ min-height:100px;
+ resize:vertical;
+
+}
+
+
+
+.error {
+
+ color:red;
+ font-size:12px;
+ margin:0;
+
+}
+
+
+
+button {
+
+ padding:12px;
+
+ border:none;
+
+ background:#0d6efd;
+
+ color:white;
+
+ border-radius:8px;
+
+ cursor:pointer;
+
+ font-size:16px;
+
+}
+
+
+
+button:hover {
+
+ opacity:.9;
+
+}
+
+
+
+
+/* ================= TABLE ================= */
+
+
+.contact-list {
+
+ margin-top:40px;
+
+}
+
+
+
+.contact-list h2 {
+
+ text-align:center;
+
+ margin-bottom:20px;
+
+}
+
+
+
+.contact-list table {
+
+ width:100%;
+
+ border-collapse:collapse;
+
+ background:white;
+
+}
+
+
+
+.contact-list th,
+.contact-list td {
+
+ border:1px solid #ddd;
+
+ padding:10px;
+
+ text-align:center;
+
+ word-break:break-word;
+
+}
+
+
+
+.contact-list th {
+
+ background:#f0f0f0;
+
+}
+
+
+
+
+.contact-list a {
+
+ color:#0d6efd;
+
+ text-decoration:none;
+
+}
+
+
+
+
+/* ================= MOBILE CARDS ================= */
+
+
+.contact-cards {
+
+ display:none;
+
+}
+
+
+.contact-card {
+
+ background:white;
+
+ padding:15px;
+
+ margin-bottom:15px;
+
+ border-radius:12px;
+
+ box-shadow:0 2px 10px rgba(0,0,0,.1);
+
+}
+
+
+
+.contact-card p {
+
+ margin:8px 0;
+
+ font-size:14px;
+
+ word-break:break-word;
+
+}
+
+
+
+.contact-card b {
+
+ color:#333;
+
+}
+
+
+
+
+/* ================= MOBILE ================= */
+
+
+@media(max-width:767px){
+
+
+.contact-container{
+
+ padding:10px;
+
+}
+
+
+
+.contact-form{
+
+ padding:15px;
+
+}
+
+
+
+.contact-form h2{
+
+ font-size:22px;
+
+}
+
+
+
+.form-row{
+
+ flex-direction:column;
+
+ gap:10px;
+
+}
+
+
+
+.contact-form input,
+.contact-form textarea{
+
+ font-size:14px;
+
+}
+
+
+
+button{
+
+ width:100%;
+
+}
+
+
+
+/* Hide table */
+
+.contact-list table{
+
+ display:none;
+
+}
+
+
+
+/* Show cards */
+
+.contact-cards{
+
+ display:block;
+
+}
+
+
+
+.contact-list h2{
+
+ font-size:22px;
+
+}
+
+
+
+.contact-card p{
+
+ font-size:13px;
+
+}
+
+
+
+}
+
+
+
+
+
+/* ================= TABLET ================= */
+
+
+@media(min-width:768px) and (max-width:1023px){
+
+
+
+.contact-form{
+
+ max-width:90%;
+
+}
+
+
+
+.form-row{
+
+ gap:12px;
+
+}
+
+
+
+.contact-form input,
+.contact-form textarea{
+
+ font-size:15px;
+
+}
+
+
+
+.contact-list table{
+
+ font-size:13px;
+
+}
+
+
+
+.contact-list th,
+.contact-list td{
+
+ padding:8px;
+
+}
+
+
+
+}
+
+
+
+
+/* ================= LAPTOP ================= */
+
+
+@media(min-width:1024px) and (max-width:1439px){
+
+
+
+.contact-form{
+
+ max-width:900px;
+
+}
+
+
+
+.contact-list{
+
+ overflow-x:auto;
+
+}
+
+
+
+.contact-list table{
+
+ min-width:900px;
+
+}
+
+
+
+}
+
+
+
+
+
+/* ================= LARGE DESKTOP ================= */
+
+
+@media(min-width:1440px){
+
+
+
+.contact-container{
+
+ padding:40px;
+
+}
+
+
+
+.contact-form{
+
+ max-width:1100px;
+
+}
+
+
+
+.contact-list table{
+
+ font-size:15px;
+
+}
+
+
+
+}

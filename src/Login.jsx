@@ -2,140 +2,149 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
 
-    // Navigation
-    const navigate = useNavigate();
+  const API = import.meta.env.VITE_API_URL;
 
-    // State
-    const [loginData, setLoginData] = useState({
-        email: "",
-        password: ""
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const [loading, setLoading] = useState(false);
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    setLoginData({
+      ...loginData,
+      [e.target.name]: e.target.value,
     });
 
-    // Handle Input Change
-    const handleChange = (e) => {
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
+  };
 
-        setLoginData({
-            ...loginData,
-            [e.target.name]: e.target.value
-        });
-    };
+  // Validation
+  const validateForm = () => {
+    let newErrors = {};
 
-    // Handle Login
-    const handleSubmit = async (e) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        e.preventDefault();
+    if (!emailRegex.test(loginData.email)) {
+      newErrors.email = "Enter valid email address";
+    }
 
-        try {
+    if (!loginData.password.trim()) {
+      newErrors.password = "Password is required";
+    }
 
-            // Backend API Call
-            const response = await fetch(
-                "https://jwt-form-backend.onrender.com/api/auth/login",
-                {
-                    method: "POST",
+    setErrors(newErrors);
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+    return Object.keys(newErrors).length === 0;
+  };
 
-                    body: JSON.stringify(loginData)
-                }
-            );
+  // Handle Login
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            // Convert Response
-            const result = await response.json();
+    if (!validateForm()) {
+      return;
+    }
 
-            console.log(result);
+    setLoading(true);
 
-            // Login Success
-            if (result.token) {
+    try {
+      const response = await fetch(`${API}/auth/login`, {
+        method: "POST",
 
-                 // Save Token
-                localStorage.setItem("token", result.token);
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-                // Check Email
-                if (loginData.email === "admin@gmail.com") {
+        body: JSON.stringify(loginData),
+      });
 
-                    // Admin Panel
-                    navigate("/admin");
+      const result = await response.json();
 
-                } else {
+      console.log(result);
 
-                    // Normal User
-                    navigate("/home");
-                }
+      // Login Success
+      if (result.token) {
+        localStorage.setItem("token", result.token);
 
-            } else {
-
-                // Error Message
-                alert(result.message);
-            }
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Server Error");
+        // Current Logic
+        if (loginData.email === "admin@gmail.com") {
+          navigate("/dashboard");
+        } else {
+          navigate("/home");
         }
-    };
 
-    return (
+        alert("Login Successful");
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.log(error);
 
-        <div className="cardContainer">
+      alert("Server Error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <div className="card">
+  return (
+    <div className="cardContainer">
+      <div className="card">
+        <h1
+          style={{
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          Login Here
+        </h1>
 
-                <h1
-                    style={{
-                        color: "white",
-                        textAlign: "center"
-                    }}
-                >
-                    Login Here
-                </h1>
+        <form className="userForm" onSubmit={handleSubmit}>
+          {/* Email */}
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter Email"
+            value={loginData.email}
+            onChange={handleChange}
+          />
 
-                <form
-                    className="userForm"
-                    onSubmit={handleSubmit}
-                >
+          <p className="error">{errors.email}</p>
 
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter Email"
-                        onChange={handleChange}
-                    />
+          {/* Password */}
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            value={loginData.password}
+            onChange={handleChange}
+          />
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter Password"
-                        onChange={handleChange}
-                    />
+          <p className="error">{errors.password}</p>
 
-                    <button type="submit">
-                        Login
-                    </button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging In..." : "Login"}
+          </button>
 
-                    <p className="authText">
-
-                        Don't have an account ?
-
-                        <Link
-                            to="/register"
-                            className="authLink"
-                        >
-                            Register
-                        </Link>
-
-                    </p>
-
-                </form>
-
-            </div>
-
-        </div>
-    );
+          <p className="authText">
+            Don't have an account?
+            <Link to="/register" className="authLink">
+              Register
+            </Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default Login;
