@@ -5,6 +5,7 @@ function Login() {
   const navigate = useNavigate();
 
   const API = import.meta.env.VITE_API_URL;
+  console.log(API)
 
   const [loginData, setLoginData] = useState({
     email: "",
