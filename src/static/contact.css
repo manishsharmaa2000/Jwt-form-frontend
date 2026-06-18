@@ -7,7 +7,7 @@
 }
 
 
-/* ================= FORM ================= */
+/*  FORM   */
 
 .contact-form {
   max-width: 1000px;
@@ -123,7 +123,7 @@ button:hover {
 
 
 
-/* ================= TABLE ================= */
+/*   TABLE  */
 
 
 .contact-list {
@@ -191,7 +191,7 @@ button:hover {
 
 
 
-/* ================= MOBILE CARDS ================= */
+/* MOBILE CARDS  */
 
 
 .contact-cards {
@@ -238,7 +238,7 @@ button:hover {
 
 
 
-/* ================= MOBILE ================= */
+/*  MOBILE  */
 
 
 @media(max-width:767px){
@@ -337,7 +337,7 @@ button{
 
 
 
-/* ================= TABLET ================= */
+/*  TABLET*/
 
 
 @media(min-width:768px) and (max-width:1023px){
@@ -391,7 +391,7 @@ button{
 
 
 
-/* ================= LAPTOP ================= */
+/* LAPTOP  */
 
 
 @media(min-width:1024px) and (max-width:1439px){
@@ -428,7 +428,7 @@ button{
 
 
 
-/* ================= LARGE DESKTOP ================= */
+/*  LARGE DESKTOP  */
 
 
 @media(min-width:1440px){
@@ -459,4 +459,81 @@ button{
 
 
 
+}
+
+.top-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.create-btn,
+.filter-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:none;
+  color:white;
+  padding:12px 20px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.create-btn{
+  background:#0d6efd;
+}
+
+.filter-btn{
+  background:#6c757d;
+}
+
+.action-icons,
+.card-actions{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:none;
+  border-radius:50%;
+  color:white;
+  cursor:pointer;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.icon-btn svg{
+  font-size:16px;
+}
+
+.icon-btn.edit{
+  background:#0d6efd;
+}
+
+.icon-btn.delete{
+  background:#dc3545;
+}
+
+.icon-btn.hide{
+  background:#fd7e14;
+}
+
+@media(max-width:767px){
+
+  .top-actions{
+    flex-direction:column;
+  }
+
+  .create-btn,
+  .filter-btn{
+    width:100%;
+    justify-content:center;
+  }
 }

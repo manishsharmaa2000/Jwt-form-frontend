@@ -8,6 +8,7 @@ import AddDetails from "./AddDetails";
 import User from "./User";
 import Dashboard from "./Dashboard";
 import Blog from "./Blog";
+import Testmonial from "./Testmonial ";
 
 function Admin() {
   const navigate = useNavigate();
@@ -32,12 +33,15 @@ function Admin() {
             Add Details
           </Link>
 
-          <Link className="menuLink" to="/dashboard/user">
+          {/* <Link className="menuLink" to="/dashboard/user">
             Users
-          </Link>
+          </Link> */}
 
           <Link className="menuLink" to="/dashboard/blog">
             Blogs
+          </Link>
+          <Link className="menuLink" to="/dashboard/testmonial">
+            Testmonial
           </Link>
         </div>
 
@@ -53,7 +57,7 @@ function Admin() {
       <div className="contentArea">
         {/* Fixed Navbar */}
         <nav className="navbar">
-          <h2>College Management System</h2>
+          <h2>College Management System Software</h2>
         </nav>
 
         {/* Page Content */}
@@ -63,8 +67,9 @@ function Admin() {
 
             <Route path="adddetails" element={<AddDetails />} />
 
-            <Route path="user" element={<User />} />
+            {/* <Route path="user" element={<User />} /> */}
             <Route path="blog" element={<Blog />} />
+            <Route path="testmonial" element={<Testmonial />} />
           </Routes>
         </div>
       </div>

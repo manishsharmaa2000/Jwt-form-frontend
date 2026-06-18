@@ -1,10 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./static/contact.css";
+import {
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaEyeSlash,
+  FaPlus
+} from "react-icons/fa";
 
 function AddDetails() {
   const API = import.meta.env.VITE_API_URL;
 
+  const [contacts, setContacts] = useState([]);
+  const [editId, setEditId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [showHidden, setShowHidden] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showList, setShowList] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,10 +32,7 @@ function AddDetails() {
     link: "",
   });
 
-  const [errors, setErrors] = useState({});
-  const [contacts, setContacts] = useState([]);
-  const [showList, setShowList] = useState(false);
-  const [loading, setLoading] = useState(false);
+
 
   const isValidUrl = (url) => {
     try {
@@ -32,7 +43,7 @@ function AddDetails() {
     }
   };
 
-
+// fetch contacts data
   const fetchContacts = async () => {
     setLoading(true);
 
@@ -56,7 +67,29 @@ function AddDetails() {
     fetchContacts();
   }, []);
 
+  const handleToggleForm = () => {
+    if (showForm) {
+      setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          website: "",
+          address: "",
+          city: "",
+          state: "",
+          country: "",
+          postalCode: "",
+          link: "",
+      });
 
+    
+      setEditId(null);
+    }
+
+    setShowForm(!showForm);
+  };
+
+  //handlechange
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -64,7 +97,7 @@ function AddDetails() {
     }));
   };
 
-
+ // validation
   const validateForm = () => {
 
     let newErrors = {};
@@ -121,48 +154,95 @@ function AddDetails() {
   };
 
 
+// create / update
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
+  if (!validateForm()) return;
 
-    e.preventDefault();
+  try {
+    if (editId) {
+      await axios.put(
+        `${API}/contact/update/${editId}`,
+        formData
+      );
 
-    if (!validateForm()) return;
-
-
-    try {
-
+      alert("Contact Updated Successfully");
+    } else {
       await axios.post(`${API}/contact`, formData);
 
-
-      await fetchContacts();
-
-
-      setFormData({
-        name:"",
-        email:"",
-        phone:"",
-        website:"",
-        address:"",
-        city:"",
-        state:"",
-        country:"",
-        postalCode:"",
-        link:"",
-      });
-
-
-      setErrors({});
-
       alert("Contact Saved Successfully");
-
-
-    } catch(error){
-
-      console.error(error);
-      alert("Something went wrong");
-
     }
 
+    await fetchContacts();
+
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      website: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      postalCode: "",
+      link: "",
+    });
+
+    setErrors({});
+    setEditId(null);
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  }
+};
+
+    // edit 
+    const handleEdit = (contact) => {
+  setFormData({
+    name: contact.name,
+    email: contact.email,
+    phone: contact.phone,
+    website: contact.website,
+    address: contact.address,
+    city: contact.city,
+    state: contact.state,
+    country: contact.country,
+    postalCode: contact.postalCode,
+    link: contact.link,
+  });
+
+  setEditId(contact._id);
+  setShowForm(true);
+};
+
+  // delete
+  const handleDelete = async (id) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this contact?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await axios.delete(`${API}/contact/delete/${id}`);
+
+    alert("Contact Deleted Successfully");
+    fetchContacts();
+  } catch (error) {
+    console.error(error);
+    alert("Delete Failed");
+  }
+};
+  const handleHide = async (id) => {
+    try {
+      await axios.put(`${API}/contact/hide/${id}`);
+
+      fetchContacts();
+    } catch (error) {
+      console.error(error);
+      alert("Action Failed");
+    }
   };
 
 
@@ -171,8 +251,28 @@ function AddDetails() {
 
 <div className="contact-container">
 
+<div className="top-actions">
+  <button
+    type="button"
+    className="create-btn"
+    onClick={handleToggleForm}
+  >
+    <FaPlus />
+    &nbsp;
+    {showForm ? "Close Form" : "Create Contact"}
+  </button>
 
-<div className="contact-form">
+  <button
+    type="button"
+    className="filter-btn"
+    onClick={() => setShowHidden(!showHidden)}
+  >
+    {showHidden
+      ? "Show Active Contacts"
+      : "Show Hidden Contacts"}
+  </button>
+</div>{showForm && (
+  <div className="contact-form">
 
 <h2>Contact Us</h2>
 
@@ -329,8 +429,7 @@ Submit
 </form>
 
 </div>
-
-
+)}
 
 
 
@@ -369,6 +468,7 @@ loading ?
 <th>Country</th>
 <th>Postal</th>
 <th>Social</th>
+<th>Actions</th>
 </tr>
 
 </thead>
@@ -378,7 +478,13 @@ loading ?
 <tbody>
 
 {
-contacts.map(item=>(
+contacts
+  .filter((item) =>
+    showHidden
+      ? item.isHidden
+      : !item.isHidden
+  )
+  .map((item) => (
 
 <tr key={item._id}>
 
@@ -416,6 +522,38 @@ Open
 </a>
 }
 
+</td><td>
+  <div className="action-icons">
+
+    <button
+      type="button"
+      className="icon-btn edit"
+      onClick={() => handleEdit(item)}
+    >
+      <FaEdit />
+    </button>
+
+    <button
+      type="button"
+      className="icon-btn delete"
+      onClick={() => handleDelete(item._id)}
+    >
+      <FaTrash />
+    </button>
+
+    <button
+      type="button"
+      className="icon-btn hide"
+      onClick={() => handleHide(item._id)}
+    >
+      {item.isHidden ? (
+        <FaEye />
+      ) : (
+        <FaEyeSlash />
+      )}
+    </button>
+
+  </div>
 </td>
 
 
@@ -437,9 +575,16 @@ Open
 {/* Mobile Cards */}
 
 <div className="contact-cards">
+ 
 
 {
-contacts.map(item=>(
+contacts
+  .filter(item =>
+    showHidden
+      ? item.isHidden
+      : !item.isHidden
+  )
+  .map(item => (
 
 <div className="contact-card" key={item._id}>
 
@@ -490,7 +635,39 @@ rel="noreferrer">
 </a>
 
 </p>
+
 }
+  <div className="action-icons">
+
+    <button
+      type="button"
+      className="icon-btn edit"
+      onClick={() => handleEdit(item)}
+    >
+      <FaEdit />
+    </button>
+
+    <button
+      type="button"
+      className="icon-btn delete"
+      onClick={() => handleDelete(item._id)}
+    >
+      <FaTrash />
+    </button>
+
+    <button
+      type="button"
+      className="icon-btn hide"
+      onClick={() => handleHide(item._id)}
+    >
+      {item.isHidden ? (
+        <FaEye />
+      ) : (
+        <FaEyeSlash />
+      )}
+    </button>
+
+  </div>
 
 
 
